@@ -6,13 +6,13 @@ from dotenv import load_dotenv
 import os
 import shutil
 
-from config import DOTENV_LOC, SUBMISSION_DOWNLOAD_DIR
+from config import dotenv_path, submission_download_dir
 
 from log import get_logger
 
 logger = get_logger(__name__)
 
-load_dotenv(DOTENV_LOC)
+load_dotenv(dotenv_path)
 
 reddit = Reddit(client_id=os.environ.get('REDDIT_CLIENT_ID'),
                 client_secret=os.environ.get('REDDIT_CLIENT_SECRET'),
@@ -24,11 +24,13 @@ def get_video_data(post_id):
     subm = reddit.submission(id=post_id)
     return dict(
         url=subm.media['reddit_video']['fallback_url'],
-        duration=subm.media['reddit_video']['duration']
+        duration=subm.media['reddit_video']['duration'],
+        height=subm.media['reddit_video']['height'],
+        width=subm.media['reddit_video']['width']
     )
 
 def download_video_from_submission(submission_id):
-    dir_path = os.path.join(SUBMISSION_DOWNLOAD_DIR, submission_id)
+    dir_path = os.path.join(submission_download_dir, submission_id)
 
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)

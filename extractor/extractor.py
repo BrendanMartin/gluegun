@@ -4,17 +4,23 @@ from math import floor
 
 import cv2
 
-from config import SUBMISSION_DOWNLOAD_DIR
+from config import submission_download_dir
 
 
 def get_duration(submission_id):
-    with open(os.path.join(SUBMISSION_DOWNLOAD_DIR, submission_id, 'data.json')) as f:
+    with open(os.path.join(submission_download_dir, submission_id, 'data.json')) as f:
         return json.load(f)['duration']
 
+def video_is_downloaded(submission_id):
+    path = os.path.join(submission_download_dir, submission_id, 'video.mp4')
+    return os.path.exists(path)
 
+def frames_extracted(submission_id):
+    path = os.path.join(submission_download_dir, submission_id, 'frames')
+    return os.path.exists(path)
 
 def submissions_to_extract():
-    submission_paths = [f.path for f in os.scandir(SUBMISSION_DOWNLOAD_DIR)]
+    submission_paths = [f.path for f in os.scandir(submission_download_dir)]
     to_return = []
     for spath in submission_paths:
         if not 'frames' in os.listdir(spath):

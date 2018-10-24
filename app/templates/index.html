@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Reddit post URL" id="redditURL">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" id="redditURLSubmit">
+                            Go!
+                        </button>
+
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div id="result"></div>
+        </div>
+
+        <div id="grid-source"><img src="../../extractor/submissions/9qcbr9/frames/frame_0.jpg" alt=""></div>
+    </div>
+{% endblock %}
