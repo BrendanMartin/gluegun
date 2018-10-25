@@ -5,7 +5,9 @@ from math import floor
 import cv2
 
 from config import submission_download_dir
+from log import get_logger
 
+logger = get_logger(__name__)
 
 def get_duration(submission_id):
     with open(os.path.join(submission_download_dir, submission_id, 'data.json')) as f:
@@ -19,6 +21,13 @@ def frames_extracted(submission_id):
     path = os.path.join(submission_download_dir, submission_id, 'frames')
     return os.path.exists(path)
 
+def get_video_path(submission_id):
+    return os.path.join(submission_download_dir, submission_id, 'video.mp4')
+
+def get_paths_of_frames(submission_id):
+    path = os.path.join(submission_download_dir, submission_id, 'frames')
+    return {x.name.split('.')[0]: x.path for x in os.scandir(path)}
+
 def submissions_to_extract():
     submission_paths = [f.path for f in os.scandir(submission_download_dir)]
     to_return = []
@@ -27,10 +36,20 @@ def submissions_to_extract():
             to_return.append(spath)
     return to_return
 
-def extract_frames():
-    submission_paths = submissions_to_extract()
+def get_submission_path(submission_id):
+    return os.path.join(submission_download_dir, submission_id)
+
+def extract_frames(submission_id=None):
+    if submission_id:
+        subm_path = get_submission_path(submission_id)
+        if os.path.exists(os.path.join(subm_path, 'frames')):
+            return True
+        submission_paths = [subm_path]
+    else:
+        submission_paths = submissions_to_extract()
 
     for spath in submission_paths:
+        logger.info('Extracting frames')
         frame_path = os.path.join(spath, 'frames')
         os.mkdir(frame_path)
 

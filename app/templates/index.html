@@ -1,21 +1,37 @@
 {% extends 'base.html' %}
 {% block content %}
-    <div class="container">
+    <div class="container" id="app">
         <div class="row">
             <div class="col-lg-6">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Reddit post URL" id="redditURL">
+                    <input type="text" class="form-control" placeholder="Reddit submission URL" v-model="redditSubmURL">
                     <span class="input-group-btn">
-                        <button class="btn btn-default" type="button" id="redditURLSubmit">
+                        <button class="btn btn-default" type="button" id="redditURLSubmit" @click="getRedditVideo" v-bind:class="{ 'disabled loading': disableURLSubmitBtn }">
                             Go!
                         </button>
-
                     </span>
                 </div>
             </div>
         </div>
         <div class="row">
             <div id="result"></div>
+            <template v-if="redditVideoURL">
+                <video width="300px" controls="" autoplay="" :src="redditVideoURL"></video>
+                <button class="btn btn-primary" @click="extractFrames" v-bind:class="{ 'disabled loading': disableExtractFramesBnt }">Extract frames</button>
+            </template>
+        </div>
+        <template v-if="Object.keys(video_frames).length > 0">
+            <div class="frames-container">
+                <div v-for="(url, name, index) in video_frames">
+                    <img :src="url" :alt="name" />
+                </div>
+            </div>
+        </template>
+        <div>
+            ${message}
+        </div>
+        <div>
+
         </div>
 
         <div id="grid-source"><img src="../../extractor/submissions/9qcbr9/frames/frame_0.jpg" alt=""></div>

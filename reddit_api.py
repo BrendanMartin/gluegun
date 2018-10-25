@@ -23,6 +23,7 @@ reddit = Reddit(client_id=os.environ.get('REDDIT_CLIENT_ID'),
 def get_video_data(post_id):
     subm = reddit.submission(id=post_id)
     return dict(
+        id=post_id,
         url=subm.media['reddit_video']['fallback_url'],
         duration=subm.media['reddit_video']['duration'],
         height=subm.media['reddit_video']['height'],

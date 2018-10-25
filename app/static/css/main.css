@@ -7,4 +7,10 @@
   background-position: center;
   color: transparent !important; }
 
+.frames-container {
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  min-height: calc(100vh - (1rem) * 2); }
+
 /*# sourceMappingURL=main.css.map */
