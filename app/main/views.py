@@ -1,9 +1,11 @@
 from time import sleep
 
-from flask import render_template, request, jsonify
+import os
+from flask import render_template, request, jsonify, send_from_directory
 
 from app.main import main
 from app.main.forms import FindRedditVideoForm
+from config import submission_download_dir
 from extractor.extractor import video_is_downloaded, frames_extracted, extract_frames, get_paths_of_frames
 from reddit_api import get_video_data, download_video_from_submission
 
@@ -34,4 +36,13 @@ def _extract_frames():
 
     extract_frames(subm_id)
     paths = get_paths_of_frames(subm_id)
+    for name, path in paths.copy().items():
+        new_path = path.split('extractor')[-1]
+        new_path = new_path.replace('\\', '/')
+        paths[name] = new_path
     return jsonify(paths)
+
+
+@main.route('/submissions/<path:filename>')
+def submission_frames(filename):
+    return send_from_directory(submission_download_dir, filename, as_attachment=True)

@@ -63,7 +63,8 @@ def extract_frames(submission_id=None):
         while success:
             success, image = video.read()
             if count % fps == 0:    # capture one frame per second
-                image_path = os.path.join(frame_path, f'frame_{second}.jpg')
+                frame_num = '0' + str(second) if second < 10 else second
+                image_path = os.path.join(frame_path, f'frame_{frame_num}.jpg')
                 cv2.imwrite(image_path, image)
                 second += 1
 
