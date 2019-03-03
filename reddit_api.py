@@ -1,4 +1,5 @@
 import json
+from pprint import pprint
 
 import requests
 from praw import Reddit
@@ -51,8 +52,20 @@ def download_video_from_submission(submission_id):
     else:
         logger.info(f'Submission "{submission_id}" already downloaded')
 
+def get_new_submissions(subreddit):
+    subs = reddit.subreddit(subreddit).hot()
+    to_return = []
+    for sub in subs:
+        if sub.over_18 or not sub.is_video:
+            continue
+        to_return.append(sub)
+    return to_return
+
 def main():
-    download_video_from_submission('9qcbr9')
+    # download_video_from_submission('9qcbr9')
+    subs = get_new_submissions('diwhy')
+    subs = list(subs)
+    print(subs[0])
 
 
 if __name__ == '__main__':

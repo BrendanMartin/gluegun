@@ -3,6 +3,7 @@ var app = new Vue({
     delimiters: ['${', '}'],
     data: {
         message: 'HELLO',
+        showSubmit: false,
         redditSubmURL: '',
         redditSubmID: '',
         redditVideoURL: '',

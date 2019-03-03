@@ -43,6 +43,11 @@ def _extract_frames():
     return jsonify(paths)
 
 
+@main.route('/_refresh_videos')
+def refresh_videos():
+    pass
+
+
 @main.route('/submissions/<path:filename>')
 def submission_frames(filename):
     return send_from_directory(submission_download_dir, filename, as_attachment=True)
