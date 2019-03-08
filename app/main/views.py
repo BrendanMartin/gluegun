@@ -1,24 +1,55 @@
+from datetime import datetime, timedelta
 from time import sleep
 
 import os
-from flask import render_template, request, jsonify, send_from_directory
+import json
+from flask import render_template, request, jsonify, send_from_directory, session
 
 from app.main import main
 from app.main.forms import FindRedditVideoForm
 from config import submission_download_dir
+from db import retrieve_videos, store_frame_selections, store_object_not_in_video, update_submissions
 from extractor.extractor import video_is_downloaded, frames_extracted, extract_frames, get_paths_of_frames
-from reddit_api import get_video_data, download_video_from_submission
+from reddit_api import get_video_data, download_video, get_new_submissions
+
+
+@main.before_request
+def init_session():
+    data = dict(
+            labeled=[],
+            subreddit='diwhy',
+            last_reddit_udpate=0
+    )
+    for k, v in data.items():
+        if k not in session.keys():
+            session[k] = v
 
 
 @main.route('/')
 def index():
     url_form = FindRedditVideoForm()
-    return render_template('index.html', url_form=url_form)
+    videos = retrieve_videos()
+    return render_template('index.html', url_form=url_form, videos=json.dumps(videos))
+
+
+@main.route('/_get_videos', methods=['POST'])
+def get_vidoes():
+    offset = int(request.form.get('offset'))
+    videos = retrieve_videos(offset, session['labeled'])
+
+    if not videos:
+        last_update = datetime.utcfromtimestamp(session['last_reddit_update'])
+        if datetime.utcnow() - last_update > timedelta(seconds=60):
+            update_submissions(session['subreddit'])
+        else:
+            return jsonify({"result": "rate-limit"})
+
+    return jsonify({"result": videos})
+
 
 @main.route('/_get_reddit_video', methods=['POST'])
 def _get_reddit_video():
     url = request.form.get('url')
-    print(url)
     if not url:
         return jsonify({})
     url = [x for x in url.split('/') if x]
@@ -27,25 +58,50 @@ def _get_reddit_video():
     data = get_video_data(subm_id)
     return jsonify(data)
 
+
 @main.route('/_extract_frames', methods=['POST'])
 def _extract_frames():
-    subm_id = request.form.get('subm_id')
+    submission_id = request.form.get('submissionID')
+    video_url = request.form.get('videoURL')
 
-    if not video_is_downloaded(subm_id):
-        download_video_from_submission(subm_id)
+    if not video_is_downloaded(submission_id):
+        download_video(submission_id, video_url)
 
-    extract_frames(subm_id)
-    paths = get_paths_of_frames(subm_id)
+    extract_frames(submission_id)
+
+    paths = get_paths_of_frames(submission_id)
+
     for name, path in paths.copy().items():
         new_path = path.split('extractor')[-1]
         new_path = new_path.replace('\\', '/')
         paths[name] = new_path
+
     return jsonify(paths)
 
 
 @main.route('/_refresh_videos')
 def refresh_videos():
     pass
+
+
+@main.route('/_save_frame_selections', methods=['POST'])
+def save_frame_selections():
+    reddit_id = request.form.get('reddit_id')
+    selections = json.loads(request.form.get('framesSelected'))
+    selections = sorted([int(s.split('_')[-1]) for s in selections])
+    store_frame_selections(reddit_id, selections)
+
+    session['labeled'].append(reddit_id)
+    session.modified = True
+
+    return jsonify({"result": "success"})
+
+
+@main.route('/_no_object', methods=['POST'])
+def object_not_in_video():
+    reddit_id = request.form.get('reddit_id')
+    store_object_not_in_video(reddit_id)
+    return jsonify({"result": "success"})
 
 
 @main.route('/submissions/<path:filename>')

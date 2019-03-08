@@ -1,11 +1,21 @@
-{% extends "bootstrap/base.html" %}
-{% block styles %}
-    {{ super() }}
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
-{% endblock %}
-{% block scripts %}
-    {{ super() }}
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+<html>
+<head>
+    {% block styles %}
+        <link rel="stylesheet" type="text/css"
+              href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/litera/bootstrap.min.css">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
+    {% endblock %}
+    {% block scripts %}
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script type="text/javascript"
+                src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+    {% endblock %}
+</head>
+<body>
+    {% block content %}{% endblock %}
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-{#    <script type="text/javascript" src="http://livejs.com/live.js"></script>#}
-{% endblock %}
+
+</body>
+</html>

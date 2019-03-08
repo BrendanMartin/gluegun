@@ -31,20 +31,15 @@ def get_video_data(post_id):
         width=subm.media['reddit_video']['width']
     )
 
-def download_video_from_submission(submission_id):
+def download_video(submission_id, video_url):
     dir_path = os.path.join(submission_download_dir, submission_id)
 
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
-        video_data = get_video_data(submission_id)
-
-        data_fp = os.path.join(dir_path, 'data.json')
-        with open(data_fp, 'w') as f:
-            json.dump(video_data, f)
 
         video_fp = os.path.join(dir_path, 'video.mp4')
 
-        with requests.get(video_data['url'], stream=True) as r:
+        with requests.get(video_url, stream=True) as r:
             with open(video_fp, 'wb') as f:
                 shutil.copyfileobj(r.raw, f)
 
@@ -52,8 +47,9 @@ def download_video_from_submission(submission_id):
     else:
         logger.info(f'Submission "{submission_id}" already downloaded')
 
+
 def get_new_submissions(subreddit):
-    subs = reddit.subreddit(subreddit).hot()
+    subs = reddit.subreddit(subreddit).hot(limit=None)
     to_return = []
     for sub in subs:
         if sub.over_18 or not sub.is_video:

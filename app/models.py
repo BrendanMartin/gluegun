@@ -1,8 +1,10 @@
 from datetime import datetime
-from sqlalchemy import Integer, Column, Text, DateTime
+from sqlalchemy import Integer, Column, Text, DateTime, ARRAY, Boolean, text
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.hybrid import hybrid_property
 
 Base = declarative_base()
+
 
 class Submission(Base):
     __tablename__ = 'submission'
@@ -18,7 +20,9 @@ class Submission(Base):
     reddit_video_duration = Column(Integer)
     reddit_video_height = Column(Integer)
     reddit_video_width = Column(Integer)
-    
+    object_time_locations = Column(ARRAY(Integer))  # Time (seconds) location of object in video
+    no_object = Column(Boolean)  # The object doesn't exist in this video
+
     def from_praw_object(self, praw_object):
         self.reddit_id = praw_object.id
         self.author = str(praw_object.author)
@@ -35,6 +39,6 @@ class Submission(Base):
     @property
     def d(self):
         return self.__dict__
-    
+
     def from_kwargs(self, **kwargs):
         self.__dict__.update(kwargs)

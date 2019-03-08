@@ -12,8 +12,113 @@
   grid-gap: 1rem;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   min-height: calc(100vh - (1rem) * 2); }
+  .frames-container .frame-outer {
+    position: relative;
+    margin: 15px 10px; }
+    .frames-container .frame-outer.selected {
+      border: 1.5em solid #edf3fd;
+      transform: scale(0.95); }
+    .frames-container .frame-outer .frame {
+      transition: transform .1s; }
+      .frames-container .frame-outer .frame:hover {
+        transform: scale(1.1); }
+      .frames-container .frame-outer .frame.selected {
+        filter: opacity(20%); }
+        .frames-container .frame-outer .frame.selected:hover {
+          transform: none; }
+    .frames-container .frame-outer .fas.fa-check-circle {
+      position: absolute;
+      font-size: 2.5em;
+      display: inline-block;
+      z-index: 21;
+      color: #1A73E8;
+      top: 15px;
+      left: 15px; }
 
 .frames-container img {
   max-width: 100%; }
+
+.load-more-wrapper {
+  text-align: center;
+  margin-bottom: 5%; }
+
+@media (min-width: 576px) {
+  .modal-dialog {
+    width: 90vw;
+    height: 90vh;
+    max-width: 100%; }
+
+  .modal-content {
+    height: auto;
+    min-height: 100%; }
+
+  .modal-footer .badge-light {
+    margin-left: .5em; } }
+.modal-body {
+  max-height: calc(100vh - 210px);
+  overflow-y: auto; }
+
+.video-block {
+  margin-bottom: 10%; }
+  .video-block video {
+    width: 100%;
+    margin-bottom: 1%; }
+  .video-block button {
+    width: 48%;
+    margin: 0% 1%; }
+
+.loader,
+.loader:before,
+.loader:after {
+  background: #0f9fff;
+  -webkit-animation: load1 1s infinite ease-in-out;
+  animation: load1 1s infinite ease-in-out;
+  width: 1em;
+  height: 4em; }
+
+.loader {
+  color: #0f9fff;
+  text-indent: -9999em;
+  margin: 88px auto;
+  position: relative;
+  font-size: 11px;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s; }
+
+.loader:before,
+.loader:after {
+  position: absolute;
+  top: 0;
+  content: ''; }
+
+.loader:before {
+  left: -1.5em;
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s; }
+
+.loader:after {
+  left: 1.5em; }
+
+@-webkit-keyframes load1 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 0;
+    height: 4em; }
+  40% {
+    box-shadow: 0 -2em;
+    height: 5em; } }
+@keyframes load1 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 0;
+    height: 4em; }
+  40% {
+    box-shadow: 0 -2em;
+    height: 5em; } }
 
 /*# sourceMappingURL=main.css.map */
