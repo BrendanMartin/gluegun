@@ -1,11 +1,22 @@
 .container {
   margin-top: 30px; }
 
+.load-more {
+  position: relative; }
+
 .loading {
-  background-image: url("../images/ajax-loader.gif");
-  background-repeat: no-repeat;
-  background-position: center;
   color: transparent !important; }
+
+.loading::before {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  content: "\f110";
+  color: white;
+  position: absolute;
+  width: 100%;
+  left: 0;
+  -webkit-animation: fa-spin 2s infinite linear;
+  animation: fa-spin 2s infinite linear; }
 
 .frames-container {
   display: grid;
@@ -58,14 +69,44 @@
   max-height: calc(100vh - 210px);
   overflow-y: auto; }
 
+.video-wrapper {
+  width: 100%; }
+
 .video-block {
-  margin-bottom: 10%; }
+  padding: 5%;
+  border: 1px solid #ebebeb;
+  box-shadow: #e8e8e8 0px 4px 10px;
+  max-width: 550px;
+  margin: 4% auto; }
+  .video-block .col-md-6 {
+    margin: 0 auto; }
   .video-block video {
     width: 100%;
-    margin-bottom: 1%; }
+    margin-bottom: 2%; }
+  .video-block .video-nav.btn-toolbar {
+    width: 65%; }
+  .video-block .btn-toolbar {
+    margin: 0 auto; }
+    .video-block .btn-toolbar .dropdown-menu {
+      min-width: 4.3rem; }
+    .video-block .btn-toolbar.labeling {
+      margin-top: 3%; }
+    .video-block .btn-toolbar .btn-group {
+      width: 100%; }
   .video-block button {
-    width: 48%;
     margin: 0% 1%; }
+
+nav .nav-link.active {
+  text-decoration: underline;
+  text-underline-position: under; }
+
+.stats-table {
+  margin-top: 5%; }
+  .stats-table h1 {
+    margin-bottom: 2%; }
+  .stats-table .row {
+    margin-bottom: 3%;
+    border-bottom: 1px solid lightgrey; }
 
 .loader,
 .loader:before,
@@ -120,5 +161,28 @@
   40% {
     box-shadow: 0 -2em;
     height: 5em; } }
+.video-block {
+  transition: all 1s; }
+
+.videos-enter {
+  opacity: 0;
+  transform: translateY(30px); }
+
+.videos-enter-active,
+.videos-leave-active {
+  transition: 1s cubic-bezier(0.59, 0.12, 0.34, 0.95);
+  transition-property: opacity, transform; }
+
+.videos-enter-to {
+  opacity: 1;
+  transform: translateX(0); }
+
+.videos-leave-active {
+  position: absolute;
+  margin: 0 auto; }
+
+.videos-leave-to {
+  opacity: 0;
+  transform: translateX(100px); }
 
 /*# sourceMappingURL=main.css.map */

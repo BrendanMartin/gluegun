@@ -13,19 +13,24 @@ var app = new Vue({
         showVideoFramesModal: false,
         showModalLoading: false,
         activeFramesRedditID: '',
-        framesSelected: []
+        framesSelected: [],
+        fetchVideosLoading: false,
+        playbackRate: 1.0,
+        playbackRates: [1.0, 1.5, 2.0, 2.5, 3.0].reverse()
     },
     created: function () {
         this.fetchVideos()
     },
     methods: {
         fetchVideos() {
+            self.fetchVideosLoading = true;
             $.post('/_get_videos', {
                 offset: this.videoData.length
             }).done(resp => {
                 if (resp.result == 'rate-limit') {
                     // dunno
                 }
+                self.fetchVideosLoading = false;
                 resp.result.map(elem => {
                     this.videoData.push(elem)
                 });
@@ -103,6 +108,17 @@ var app = new Vue({
             this.videoData = this.videoData.filter(el => {
                 return el.reddit_id != reddit_video_id
             })
+        },
+        timeForward(reddit_id, amount) {
+            this.$refs[reddit_id][0].currentTime += amount
+        },
+        stepBackward(reddit_id, amount) {
+            this.$refs[reddit_id][0].currentTime -= amount
+        },
+        setPlaybackRate(reddit_id, rate) {
+            this.playbackRate = rate;
+            console.log(this.$refs[reddit_id][0]);
+            this.$refs[reddit_id][0].playbackRate = rate
         }
     }
 });

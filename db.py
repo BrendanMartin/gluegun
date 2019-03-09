@@ -102,14 +102,28 @@ def store_object_not_in_video(reddit_id):
 
 def compute_statistics():
     stmt = text("""select * from 
-        (select count(*) as "total_count" from submission ) as total_count, 
-        (select count(*) as "labeled_count" from submission  where array_length(object_time_locations, 1) > 0) as labeled_count,
-        (select count(*) as "no_object_count" from submission where no_object = true) as no_object_count""")
+(select count(*) as "total_count" from submission ) as total_count, 
+(select count(*) as "videos_labeled_count" from submission  where array_length(object_time_locations, 1) > 0) as videos_labeled_count,
+(select count(*) as "no_object_count" from submission where no_object = true) as no_object_count,
+(select sum(array_length(object_time_locations, 1)) as "labeled_frames_count" from submission) as labeled_frames_count,
+(select count(*) as "needs_labeling_count" from submission where object_time_locations is null and no_object is null) as needs_labeling_count
+""")
+
+    labels = dict(
+        total_count="Videos in database",
+        videos_labeled_count="Videos with frames labeled",
+        no_object_count="Videos with no object",
+        labeled_frames_count="Frames labeled",
+        needs_labeling_count="Videos that need labeling"
+    )
 
     with get_session() as sess:
         result = sess.execute(stmt).fetchall()[0]
-        result = dict(zip(result.keys(), result))
-        return result
+        result = dict(result)
+        fmt_result = dict()
+        for k, v in result.items():
+            fmt_result[labels[k]] = v
+        return fmt_result
 
 
 if __name__ == '__main__':

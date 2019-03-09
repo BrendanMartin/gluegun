@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% set active_page = 'main.stats' %}
+{% block content %}
+    <div class="stats-table">
+        <h1>Glue Gun Statistics</h1>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">Stat</th>
+                <th scope="col">Count</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for stat, value in stats.items() %}
+                <tr>
+                    <th scope="row">{{ stat }}</th>
+                    <td>{{ value }}</td>
+                </tr>
+            {% endfor %}
+{#            <tr>#}
+{#                <th scope="row">Videos in database</th>#}
+{#                <td>{{ stats.total_count }}</td>#}
+{#            </tr>#}
+{#            <tr>#}
+{#                <th scope="row">Videos with frames labeled</th>#}
+{#                <td>{{ stats.labeled_count }}</td>#}
+{#            </tr>#}
+{#            <tr>#}
+{#                <th scope="row">Frames labeled</th>#}
+{#                <td>{{ stats.labeled_frames_count }}</td>#}
+{#            </tr>#}
+{#            <tr>#}
+{#                <th scope="row">Videos with no object</th>#}
+{#                <td>{{ stats.no_object_count }}</td>#}
+{#            </tr>#}
+{#            <tr class="table-warning">#}
+{#                <th scope="row">Videos that need labeling</th>#}
+{#                <td>{{ stats.needs_labeling_count }}</td>#}
+{#            </tr>#}
+            </tbody>
+        </table>
+    </div>
+    <div class="leaderboard">
+        <table class="table">
+
+        </table>
+    </div>
+{% endblock %}

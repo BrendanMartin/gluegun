@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-    <div class="container" id="app">
+    <div id="app">
         <template v-if="showSubmit">
             <div class="row">
                 <div class="col-lg-6">
@@ -26,26 +26,72 @@
                 </button>
             </template>
         </div>
-        <div v-for="video in videoData" class="row video-block">
-            <div class="col-md-6 offset-3">
-                <div class="row">
-                    <video controls="" :src="video.reddit_video_url"></video>
-                </div>
-                <div class="row">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#videoFramesModal"
-                            @click="activeFramesRedditID=video.reddit_id; extractFrames(video.reddit_id, video.reddit_video_url)">
-                        Show video frames
-                    </button>
-                    <button type="button" class="btn btn-dark" @click="noObject(video.reddit_id)">Object not present
-                    </button>
-                </div>
-            </div>
+
+        <div class="video-list">
 
 
+            <transition-group name="videos" tag="p">
+                <div v-for="video in videoData" class="row video-block" v-bind:key="video.reddit_id">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="video-wrapper">
+                                <video controls="" :height="video.height" :src="video.reddit_video_url"
+                                       :ref="video.reddit_id"></video>
+                                <div class="video-nav btn-toolbar" role="toolbar" aria-label="Video nav toolbar">
+                                    <div class="btn-group mr-2" role="group">
+                                        <button type="button" class="btn btn-info"
+                                                @click="stepBackward(video.reddit_id, 5)"><i
+                                                class="fas fa-angle-double-left"></i></button>
+                                        <button type="button" class="btn btn-info"
+                                                @click="stepBackward(video.reddit_id, 1)"><i
+                                                class="fas fa-angle-left"></i>
+                                        </button>
+                                        <div class="btn-group dropup" role="group">
+                                            <button id="playbackRateDrop" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                ${ playbackRate }
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="playbackRateDrop">
+                                                <a v-for="rate in playbackRates"
+                                                   class="dropdown-item"
+                                                   @click.prevent="setPlaybackRate(video.reddit_id, rate)"
+                                                   href="#">${ rate }</a>
+                                            </div>
+                                        </div>
+                                        <button type="button" class="btn btn-info"
+                                                @click="timeForward(video.reddit_id, 1)"><i
+                                                class="fas fa-angle-right"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-info"
+                                                @click="timeForward(video.reddit_id, 5)"><i
+                                                class="fas fa-angle-double-right"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-toolbar labeling" role="toolbar" aria-label="Video labeling toolbar">
+                        <div class="btn-group mr-2" role="group">
+                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#videoFramesModal"
+                                    @click="activeFramesRedditID=video.reddit_id; extractFrames(video.reddit_id, video.reddit_video_url)">
+                                Label video frames
+                            </button>
+                        </div>
+                        <div class="btn-group mr-2" role="group">
+                            <button type="button" class="btn btn-light" @click="noObject(video.reddit_id)">Object not
+                                present
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </transition-group>
         </div>
+
         <div class="row">
             <div class="col-md-6 offset-3 load-more-wrapper">
-                <button @click="fetchVideos" class="btn btn-secondary load-more">Load more</button>
+                <button @click="fetchVideos"
+                        :class="['btn', 'btn-secondary', 'load-more', { loading : fetchVideosLoading}]">Load more
+                </button>
             </div>
         </div>
 

@@ -8,7 +8,8 @@ from flask import render_template, request, jsonify, send_from_directory, sessio
 from app.main import main
 from app.main.forms import FindRedditVideoForm
 from config import submission_download_dir
-from db import retrieve_videos, store_frame_selections, store_object_not_in_video, update_submissions
+from db import retrieve_videos, store_frame_selections, store_object_not_in_video, update_submissions, \
+    compute_statistics
 from extractor.extractor import video_is_downloaded, frames_extracted, extract_frames, get_paths_of_frames
 from reddit_api import get_video_data, download_video, get_new_submissions
 
@@ -18,7 +19,7 @@ def init_session():
     data = dict(
             labeled=[],
             subreddit='diwhy',
-            last_reddit_udpate=0
+            last_reddit_update=0
     )
     for k, v in data.items():
         if k not in session.keys():
@@ -32,6 +33,18 @@ def index():
     return render_template('index.html', url_form=url_form, videos=json.dumps(videos))
 
 
+@main.route('/stats')
+def stats():
+    stats = compute_statistics()
+    return render_template("stats.html", stats=stats)
+
+
+@main.route('/localization')
+def localization():
+    return "<h1>Localization</h1>"
+
+
+
 @main.route('/_get_videos', methods=['POST'])
 def get_vidoes():
     offset = int(request.form.get('offset'))
@@ -41,6 +54,7 @@ def get_vidoes():
         last_update = datetime.utcfromtimestamp(session['last_reddit_update'])
         if datetime.utcnow() - last_update > timedelta(seconds=60):
             update_submissions(session['subreddit'])
+            videos = retrieve_videos(offset, session['labeled'])
         else:
             return jsonify({"result": "rate-limit"})
 
