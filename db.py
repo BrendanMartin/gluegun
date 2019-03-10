@@ -20,8 +20,19 @@ def destroy_db():
     Base.metadata.drop_all(engine)
 
 
+def get_engine(URI):
+    return create_engine(URI)
+
+
 @contextmanager
-def get_session():
+def get_session(dev=False, prod=False):
+    global engine
+
+    if dev:
+        pass
+    if prod:
+        engine = get_engine(os.getenv('PROD_PROXY_URI'))
+
     session = sessionmaker(bind=engine)()
     try:
         yield session
@@ -126,12 +137,46 @@ def compute_statistics():
         return fmt_result
 
 
+def from_sql(row):
+    """Translates a SQLAlchemy model instance into a dictionary"""
+    data = row.__dict__.copy()
+    data['id'] = row.id
+    data.pop('_sa_instance_state')
+    return data
+
+
+def transfer_data_to_prod():
+    with get_session() as dev_s:
+        data = dev_s.query(Submission).all()
+        data = [from_sql(row) for row in data]
+
+    prod_engine = create_engine(os.environ.get('PROD_PROXY_URI'))
+    Base.metadata.drop_all(prod_engine)
+    Base.metadata.create_all(prod_engine)
+
+    Session = sessionmaker(prod_engine)
+    prod_s = Session()
+
+    for d in data:
+        sub = Submission(**d)
+        prod_s.add(sub)
+
+    prod_s.commit()
+    prod_s.close()
+
+
+def sync_local_prod_databases():
+    with get_session() as dev_s:
+        pass
+
 if __name__ == '__main__':
+    pass
+    # transfer_data_to_prod()
     # destroy_db()
     # create_db()
     # update_submissions()
-    r = compute_statistics()
-    print(r)
+    # r = compute_statistics()
+    # print(r)
     #
     # submissions = list(get_new_submissions('diwhy'))
     # with get_session() as sess:

@@ -78,6 +78,15 @@
   box-shadow: #e8e8e8 0px 4px 10px;
   max-width: 550px;
   margin: 4% auto; }
+  .video-block #videoInfoDrop {
+    display: block;
+    position: absolute;
+    top: -45px;
+    right: -480px;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 1.2em;
+    color: lightgrey; }
   .video-block .col-md-6 {
     margin: 0 auto; }
   .video-block video {

@@ -91,6 +91,8 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+docker.env
+
 
 # Spyder project settings
 .spyderproject
@@ -110,4 +112,4 @@ venv.bak/
 *.mp4
 *.jpg
 
-
+/credentials.json

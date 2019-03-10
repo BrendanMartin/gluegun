@@ -39,6 +39,13 @@ def submissions_to_extract():
 def get_submission_path(submission_id):
     return os.path.join(submission_download_dir, submission_id)
 
+def zero_pad_frame(frame, total_frames):
+    fr = str(frame)
+    tfr = str(total_frames)
+    while len(fr) < len(tfr):
+        fr = '0' + fr
+    return fr
+
 def extract_frames(submission_id=None):
     if submission_id:
         subm_path = get_submission_path(submission_id)
@@ -56,15 +63,18 @@ def extract_frames(submission_id=None):
         video_path = os.path.join(spath, 'video.mp4')
         video = cv2.VideoCapture(video_path)
         fps = video.get(cv2.CAP_PROP_FPS)
+        frameCount = int(video.get(cv2.CAP_PROP_FRAME_COUNT))
+        duration = int(frameCount / fps)
 
+        # TODO zero pad frame names by calculating total number of frames first to find number of zeros to prepend
         count = 0
         second = 0
         success = 1
         while success:
             success, image = video.read()
             if count % fps == 0:    # capture one frame per second
-                frame_num = '0' + str(second) if second < 10 else second
-                image_path = os.path.join(frame_path, f'frame_{frame_num}.jpg')
+                frame_num = zero_pad_frame(second, duration)
+                image_path = os.path.join(frame_path, f'{frame_num}.jpg')
                 cv2.imwrite(image_path, image)
                 second += 1
 
@@ -74,7 +84,9 @@ def extract_frames(submission_id=None):
     cv2.destroyAllWindows()
 
 def main():
-    extract_frames()
+    print(zero_pad_frame(1, 3546))
+
+    # extract_frames()
 
 if __name__ == '__main__':
     main()

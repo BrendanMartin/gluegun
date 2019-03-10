@@ -122,6 +122,17 @@
     max-width: 550px;
     margin: 4% auto;
 
+  #videoInfoDrop {
+    display: block;
+    position: absolute;
+    top: -45px;
+    right: -480px;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 1.2em;
+    color: lightgrey;
+  }
+
   .col-md-6 {
     margin: 0 auto;
   }

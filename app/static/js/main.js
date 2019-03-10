@@ -109,16 +109,18 @@ var app = new Vue({
                 return el.reddit_id != reddit_video_id
             })
         },
-        timeForward(reddit_id, amount) {
-            this.$refs[reddit_id][0].currentTime += amount
+        timeForward(idx, amount) {
+            this.$refs["video"][idx].currentTime += amount
         },
-        stepBackward(reddit_id, amount) {
-            this.$refs[reddit_id][0].currentTime -= amount
+        stepBackward(idx, amount) {
+            this.$refs["video"][idx].currentTime -= amount
         },
-        setPlaybackRate(reddit_id, rate) {
+        setPlaybackRate(rate) {
             this.playbackRate = rate;
             console.log(this.$refs[reddit_id][0]);
-            this.$refs[reddit_id][0].playbackRate = rate
+            for (i = 0; i < this.$refs["video"].length; i++) {
+                this.$refs["video"][i].playbackRate = rate
+            }
         }
     }
 });
