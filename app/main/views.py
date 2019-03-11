@@ -3,15 +3,24 @@ from time import sleep
 
 import os
 import json
-from flask import render_template, request, jsonify, send_from_directory, session
+from flask import render_template, request, jsonify, send_from_directory, session, current_app
 
 from app.main import main
 from app.main.forms import FindRedditVideoForm
 from config import submission_download_dir
 from db import retrieve_videos, store_frame_selections, store_object_not_in_video, update_submissions, \
     compute_statistics
-from extractor.extractor import video_is_downloaded, frames_extracted, extract_frames, get_paths_of_frames
+from log import get_logger
 from reddit_api import get_video_data, download_video, get_new_submissions
+from extractor.extractor import extract_frames
+
+logger = get_logger(__name__)
+
+if current_app.config.get('FLASK_CONFIG') == 'prod':
+    logger.info('Using Google Cloud Storage')
+    from gstorage import video_is_downloaded, frames_exist
+else:
+    from extractor.storage import video_is_downloaded, frames_exist
 
 
 @main.before_request
@@ -78,10 +87,14 @@ def _extract_frames():
     submission_id = request.form.get('submissionID')
     video_url = request.form.get('videoURL')
 
-    if not video_is_downloaded(submission_id):
-        download_video(submission_id, video_url)
+    # Changed to stream to CV2 right from video URL
+    # if not video_is_downloaded(submission_id):
+    #     download_video(submission_id, video_url)
 
-    extract_frames(submission_id)
+    # Check if frames already extracted
+
+    if not frames_exist(submission_id):
+        paths = extract_frames(submission_id, video_url)
 
     paths = get_paths_of_frames(submission_id)
 

@@ -9,12 +9,13 @@ dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
 load_dotenv(dotenv_path)
 
 submission_download_dir = os.path.join(os.path.dirname(__file__), 'extractor', 'submissions')
-
+gcloud_download_dir = 'extractor/submissions/'
 
 class Config():
     SECRET_KEY = os.getenv('SECRET_KEY')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    PROJECT_ID = 'gluegun-app'
+    GOOGLE_PROJECT_ID = os.getenv('GOOGLE_PROJECT_ID')
+    CLOUD_STORAGE_BUCKET = os.getenv('CLOUD_STORAGE_BUCKET')
 
     @staticmethod
     def init_app(app):
