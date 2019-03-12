@@ -1,3 +1,5 @@
+import Hello from './Hello.vue'
+
 var app = new Vue({
     el: '#app',
     delimiters: ['${', '}'],
@@ -11,7 +13,8 @@ var app = new Vue({
         videoData: [],
         videoFrames: {},
         showVideoFramesModal: false,
-        showModalLoading: false,
+        framesLoading: false,
+        totalFramesLoaded: 0,
         activeFramesRedditID: '',
         framesSelected: [],
         fetchVideosLoading: false,
@@ -21,6 +24,10 @@ var app = new Vue({
     created: function () {
         this.fetchVideos()
     },
+    components: {
+      Hello
+    },
+    computed: {},
     methods: {
         fetchVideos() {
             self.fetchVideosLoading = true;
@@ -57,24 +64,29 @@ var app = new Vue({
                 return true;
             }
             this.disableExtractFramesBnt = true;
-            this.showModalLoading = true;
+            this.framesLoading = true;
 
             $.post('/_extract_frames', {
                 submissionID: submissionID,
                 videoURL: videoURL
             }).done(resp => {
                 this.disableExtractFramesBnt = false;
-                this.showModalLoading = false;
                 this.videoFrames = resp;
             }).fail(() => {
                 return false
             });
         },
-        selectFrame(name) {
-            if (this.framesSelected.includes(name)) {
-                this.framesSelected.splice(this.framesSelected.indexOf(name, 1))
+        frameLoaded() {
+            this.totalFramesLoaded += 1;
+            if (this.totalFramesLoaded >= Object.keys(this.videoFrames).length) {
+                this.framesLoading = false;
+            }
+        },
+        selectFrame(key) {
+            if (this.framesSelected.includes(key)) {
+                this.framesSelected.splice(this.framesSelected.indexOf(key, 1))
             } else {
-                this.framesSelected.push(name)
+                this.framesSelected.push(key)
             }
         },
         clearFrameSelections() {

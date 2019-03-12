@@ -13,6 +13,10 @@
         <script type="text/javascript" src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
         <script type="text/javascript"
                 src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        <script type="text/javascript"
+                src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+        <script type="text/javascript"
+                src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.11/lodash.core.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
     {% endblock %}
 </head>
@@ -33,27 +37,27 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 {% for href, route, label in navigation_bar %}
-                <li class="nav-item">
-                    <a href="{{ href|e }}" class="nav-link {% if route == active_page %}active{% endif %}">
-                        {{ label|e }}
-                    </a>
-                </li>
-{#                <li class="nav-item">#}
-{#                    <a href="{{ url_for('main.localization') }}" class="nav-link">Localization</a>#}
-{#                </li>#}
-{#                <li class="nav-item">#}
-{#                    <a href="{{ url_for('main.stats') }}" class="nav-link">Stats</a>#}
-{#                </li>#}
+                    <li class="nav-item">
+                        <a href="{{ href|e }}" class="nav-link {% if route == active_page %}active{% endif %}">
+                            {{ label|e }}
+                        </a>
+                    </li>
+                    {#                <li class="nav-item">#}
+                    {#                    <a href="{{ url_for('main.localization') }}" class="nav-link">Localization</a>#}
+                    {#                </li>#}
+                    {#                <li class="nav-item">#}
+                    {#                    <a href="{{ url_for('main.stats') }}" class="nav-link">Stats</a>#}
+                    {#                </li>#}
                 {% endfor %}
             </ul>
-{#            <span class="nav-item"></span>#}
+            {#            <span class="nav-item"></span>#}
         </div>
     </nav>
 
     {% block content %}{% endblock %}
 </div>
 
-<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script src="{{ url_for('static', filename='dist/main.js') }}"></script>
 
 </body>
 </html>

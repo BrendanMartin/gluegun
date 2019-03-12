@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
     <div id="app">
+    <Hello></Hello>
         <template v-if="showSubmit">
             <div class="row">
                 <div class="col-lg-6">
@@ -121,16 +122,16 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div v-if="showModalLoading">
+                        <div v-if="framesLoading">
                             <div class="loader">Loading...</div>
                         </div>
                         <template v-if="Object.keys(videoFrames).length > 0">
-                            <div class="frames-container">
-                                <div v-for="(url, name, index) in videoFrames" :key="name"
-                                     :class="['frame-outer', {selected:framesSelected.includes(name)}]">
-                                    <img :class="['frame', {selected:framesSelected.includes(name)}]"
-                                         @click="selectFrame(name)" :src="url" :alt="name"/>
-                                    <i v-if="framesSelected.includes(name)" class="fas fa-check-circle"></i>
+                            <div class="frames-container" v-show="!framesLoading">
+                                <div v-for="(url, key, index) in videoFrames" :key="key"
+                                     :class="['frame-outer', {selected:framesSelected.includes(key)}]">
+                                    <img :class="['frame', {selected:framesSelected.includes(key)}]"
+                                         @click="selectFrame(key)" :src="url" @load="frameLoaded"/>
+                                    <i v-if="framesSelected.includes(key)" class="fas fa-check-circle"></i>
 
                                 </div>
                             </div>

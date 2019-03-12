@@ -1,10 +1,10 @@
 import os
 import cv2
 import config
-if os.getenv('FLASK_CONFIG') == 'prod':
-    from gstorage import get_submission_path, store_frame
+if os.getenv('USE_CLOUD_STORAGE') == '1':
+    from gstorage import store_frame
 else:
-    from .storage import get_submission_path
+    from .storage import store_frame
 
 from log import get_logger
 logger = get_logger(__name__)

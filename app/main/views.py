@@ -16,11 +16,11 @@ from extractor.extractor import extract_frames
 
 logger = get_logger(__name__)
 
-if current_app.config.get('FLASK_CONFIG') == 'prod':
+if os.getenv('USE_CLOUD_STORAGE') == '1':
     logger.info('Using Google Cloud Storage')
     from gstorage import video_is_downloaded, frames_exist
 else:
-    from extractor.storage import video_is_downloaded, frames_exist
+    from extractor.storage import video_is_downloaded, frames_exist, get_paths_of_frames
 
 
 @main.before_request
@@ -93,15 +93,21 @@ def _extract_frames():
 
     # Check if frames already extracted
 
+    paths = []
+
     if not frames_exist(submission_id):
         paths = extract_frames(submission_id, video_url)
+    else:
+        paths = get_paths_of_frames(submission_id)
 
-    paths = get_paths_of_frames(submission_id)
+    print(os.getenv('USE_CLOUD_STORAGE'), type(os.getenv('USE_CLOUD_STORAGE')))
 
-    for name, path in paths.copy().items():
-        new_path = path.split('extractor')[-1]
-        new_path = new_path.replace('\\', '/')
-        paths[name] = new_path
+    if os.getenv('USE_CLOUD_STORAGE') == '0':
+        # We're dealing with local files. Edit paths to use with send_from_directory
+        for key, path in paths.copy().items():
+            new_path = path.split('extractor')[-1]
+            new_path = new_path.replace('\\', '/')
+            paths[key] = new_path
 
     return jsonify(paths)
 
@@ -115,7 +121,7 @@ def refresh_videos():
 def save_frame_selections():
     reddit_id = request.form.get('reddit_id')
     selections = json.loads(request.form.get('framesSelected'))
-    selections = sorted([int(s.split('_')[-1]) for s in selections])
+    selections = sorted([int(s) for s in selections])
     store_frame_selections(reddit_id, selections)
 
     session['labeled'].append(reddit_id)

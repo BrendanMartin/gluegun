@@ -1,3 +1,5 @@
+import itertools
+
 import cv2
 import os
 
@@ -11,9 +13,9 @@ def video_is_downloaded(submission_id):
     return os.path.exists(path)
 
 
-def frames_extracted(submission_id):
+def frames_exist(submission_id):
     path = os.path.join(submission_download_dir, submission_id, 'frames')
-    return os.path.exists(path)
+    return os.path.exists(path) and len(os.listdir(path)) > 0
 
 
 def get_video_path(submission_id):
@@ -22,7 +24,7 @@ def get_video_path(submission_id):
 
 def get_paths_of_frames(submission_id):
     path = os.path.join(submission_download_dir, submission_id, 'frames')
-    return {x.name.split('.')[0]: x.path for x in os.scandir(path)}
+    return {x: y.path for x, y in zip(itertools.count(), os.scandir(path))}
 
 
 def get_submission_path(submission_id):
@@ -44,8 +46,8 @@ def submissions_to_extract():
 
 
 def store_frame(cv_image, submission_id, filename):
-    frame_path = os.path.join(get_submission_path(submission_id), 'frames')
-    os.mkdir(frame_path)
+    frame_path = os.path.join(submission_download_dir, submission_id, 'frames')
+    os.makedirs(frame_path, exist_ok=True)
     image_path = os.path.join(frame_path, filename)
-    cv2.imwrite(cv_image, image_path)
+    cv2.imwrite(image_path, cv_image)
     return image_path
