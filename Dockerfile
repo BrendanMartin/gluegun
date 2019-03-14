@@ -21,7 +21,7 @@ WORKDIR /home/objdetect/objdetect
 
 COPY app app
 COPY extractor extractor
-COPY config.py db.py log.py reddit_api.py run.py boot.sh ./
+COPY config.py db.py log.py reddit_api.py run.py gstorage.py boot.sh ./
 RUN chmod a+x boot.sh
 
 #ENV FLASK_APP run.py

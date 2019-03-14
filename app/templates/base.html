@@ -8,17 +8,6 @@
               crossorigin="anonymous">
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
     {% endblock %}
-    {% block scripts %}
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script type="text/javascript" src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
-        <script type="text/javascript"
-                src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-        <script type="text/javascript"
-                src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
-        <script type="text/javascript"
-                src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.11/lodash.core.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
-    {% endblock %}
 </head>
 <body>
 {% set navigation_bar = [
@@ -42,12 +31,6 @@
                             {{ label|e }}
                         </a>
                     </li>
-                    {#                <li class="nav-item">#}
-                    {#                    <a href="{{ url_for('main.localization') }}" class="nav-link">Localization</a>#}
-                    {#                </li>#}
-                    {#                <li class="nav-item">#}
-                    {#                    <a href="{{ url_for('main.stats') }}" class="nav-link">Stats</a>#}
-                    {#                </li>#}
                 {% endfor %}
             </ul>
             {#            <span class="nav-item"></span>#}
@@ -57,6 +40,11 @@
     {% block content %}{% endblock %}
 </div>
 
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
+<script type="text/javascript"
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
 <script src="{{ url_for('static', filename='dist/main.js') }}"></script>
 
 </body>

@@ -137,6 +137,13 @@ def object_not_in_video():
     return jsonify({"result": "success"})
 
 
+@main.route('/_save_bbox', methods=['POST'])
+def save_bbox():
+    image = request.form.get('image')
+    bbox = request.form.get('bbox')
+    print(image, bbox)
+    return jsonify({'result': 'success'})
+
 @main.route('/submissions/<path:filename>')
 def submission_frames(filename):
     return send_from_directory(submission_download_dir, filename, as_attachment=True)

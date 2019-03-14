@@ -1,4 +1,7 @@
 import Hello from './Hello.vue'
+import Localizer from './Localizer.vue'
+
+Vue.config.delimiters = ['${', '}'];
 
 var app = new Vue({
     el: '#app',
@@ -19,13 +22,20 @@ var app = new Vue({
         framesSelected: [],
         fetchVideosLoading: false,
         playbackRate: 1.0,
-        playbackRates: [1.0, 1.5, 2.0, 2.5, 3.0].reverse()
+        playbackRates: [1.0, 1.5, 2.0, 2.5, 3.0].reverse(),
+        confirmNoObject: '',
+        localizingImage: {
+            url: '/submissions/agg8n5/frames/01.jpg',
+            width: 608,
+            height: 1080
+        }
     },
     created: function () {
         this.fetchVideos()
     },
     components: {
-      Hello
+        Hello,
+        Localizer
     },
     computed: {},
     methods: {
@@ -133,6 +143,6 @@ var app = new Vue({
             for (i = 0; i < this.$refs["video"].length; i++) {
                 this.$refs["video"][i].playbackRate = rate
             }
-        }
+        },
     }
 });

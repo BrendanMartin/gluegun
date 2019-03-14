@@ -1,14 +1,14 @@
 
 .container {
-  margin-top: 30px;
+    margin-top: 30px;
 }
 
 .load-more {
-  position: relative;
+    position: relative;
 }
 
 .loading {
-  color: transparent !important;
+    color: transparent !important;
 }
 
 .loading::before {
@@ -24,97 +24,98 @@
 }
 
 .frames-container {
-  display: grid;
-  grid-gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  min-height: calc(100vh - (1rem) * 2);
+    display: grid;
+    grid-gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    min-height: calc(100vh - (1rem) * 2);
 
-  .frame-outer {
-    position: relative;
-    margin: 15px 10px;
+    .frame-outer {
+        position: relative;
+        margin: 15px 10px;
 
-    &.selected {
-      border: 1.5em solid #edf3fd;
-      transform: scale(0.95);
+        &.selected {
+            border: 1.5em solid #edf3fd;
+            transform: scale(0.95);
 
-    }
-
-    &:hover {
-      //transform: scale(1.1);
-    }
-
-    .frame {
-      transition: transform .1s;
-
-      &:hover {
-        transform: scale(1.1);
-      }
-
-      &.selected {
-        filter: opacity(20%);
+        }
 
         &:hover {
-          transform: none;
+            //transform: scale(1.1);
         }
-      }
-    }
 
-    .fas.fa-check-circle {
-      position: absolute;
-      font-size: 2.5em;
-      display: inline-block;
-      z-index: 21;
-      color: #1A73E8;
-      top: 15px;
-      left: 15px;
+        .frame {
+            transition: transform .1s;
 
+            &:hover {
+                transform: scale(1.1);
+            }
+
+            &.selected {
+                filter: opacity(20%);
+
+                &:hover {
+                    transform: none;
+                }
+            }
+        }
+
+        .fas.fa-check-circle {
+            position: absolute;
+            font-size: 2.5em;
+            display: inline-block;
+            z-index: 21;
+            color: #1A73E8;
+            top: 15px;
+            left: 15px;
+
+        }
     }
-  }
 }
 
 .frames-container {
-  img {
-    max-width: 100%;
-  }
+    img {
+        max-width: 100%;
+    }
 }
 
 .load-more-wrapper {
-  text-align: center;
-  margin-bottom: 5%;
+    text-align: center;
+    margin-bottom: 5%;
 }
 
 @media (min-width: 576px) {
-  .modal-dialog {
-    width: 90vw;
-    height: 90vh;
-    max-width: 100%;
-    //margin: 0;
-    //padding: 0;
-  }
-
-  .modal-content {
-    height: auto;
-    min-height: 100%;
-    //border-radius: 0;
-  }
-
-  .modal-footer {
-
-    .badge-light {
-      margin-left: .5em;
+    .modal-dialog {
+        width: 90vw;
+        height: 90vh;
+        max-width: 100%;
+        //margin: 0;
+        //padding: 0;
     }
-  }
+
+    .modal-content {
+        height: auto;
+        min-height: 100%;
+        //border-radius: 0;
+    }
+
+    .modal-footer {
+
+        .badge-light {
+            margin-left: .5em;
+        }
+    }
 
 }
 
 .modal-body {
-  max-height: calc(100vh - 210px);
-  overflow-y: auto;
+    max-height: calc(100vh - 210px);
+    overflow-y: auto;
 }
 
 .video-wrapper {
-  width: 100%;
+    width: 100%;
 }
+
 .video-block {
     padding: 5%;
     border: 1px solid #ebebeb;
@@ -122,157 +123,178 @@
     max-width: 550px;
     margin: 4% auto;
 
-  #videoInfoDrop {
-    display: block;
-    position: absolute;
-    top: -45px;
-    right: -480px;
-    padding: 10px;
-    cursor: pointer;
-    font-size: 1.2em;
-    color: lightgrey;
-  }
+    #videoInfoDrop {
+        display: block;
+        position: absolute;
+        top: -45px;
+        right: -480px;
+        padding: 10px;
+        cursor: pointer;
+        font-size: 1.2em;
+        color: lightgrey;
 
-  .col-md-6 {
-    margin: 0 auto;
-  }
+        .dropdown-menu {
+            padding: 0;
+        }
 
-  video {
-    width: 100%;
-    margin-bottom: 2%
-  }
-
-  .video-nav.btn-toolbar {
-    width: 65%;
-  }
-
-  .btn-toolbar {
-    margin: 0 auto;
-
-    .dropdown-menu {
-      min-width: 4.3rem;
+        .dropdown-item {
+                padding: 10px 15px;
+        }
     }
 
-    &.labeling{
-      margin-top: 3%;
+    video {
+        width: 100%;
+        margin-bottom: 2%
     }
 
-    .btn-group {
-      width: 100%;
-    }
-  }
+    .video-nav.btn-toolbar {
+        width: 65%;
 
-  button {
-    //width: 48%;
-    margin: 0% 1%;
-  }
+        .dropup {
+            width: 3.5em;
+        }
+    }
+
+    .btn-toolbar {
+        margin: 0 auto;
+
+        .dropdown-menu {
+            min-width: 4.3rem;
+        }
+
+        &.labeling {
+            margin-top: 3%;
+        }
+
+        .btn-group {
+            width: 100%;
+        }
+    }
+
+    button {
+        //width: 48%;
+        margin: 0% 1%;
+    }
+
+    .confirm-no-object {
+        width: 100%;
+        text-align: center;
+        display: block;
+        margin-top: .9em;
+
+        a {
+            margin-left: 10px;
+        }
+    }
 }
 
 nav {
-  .nav-link.active {
-    text-decoration: underline;
-    text-underline-position: under;
-  }
+    .nav-link.active {
+        text-decoration: underline;
+        text-underline-position: under;
+    }
 }
 
 .stats-table {
-  margin-top: 5%;
+    margin-top: 5%;
 
-  h1 {margin-bottom: 2%}
+    h1 {
+        margin-bottom: 2%
+    }
 
-  .row {
-    margin-bottom: 3%;
-    border-bottom: 1px solid lightgrey;
-  }
+    .row {
+        margin-bottom: 3%;
+        border-bottom: 1px solid lightgrey;
+    }
 }
 
 ////// Loading icon in frames modal //////
 .loader,
 .loader:before,
 .loader:after {
-  background: #0f9fff;
-  -webkit-animation: load1 1s infinite ease-in-out;
-  animation: load1 1s infinite ease-in-out;
-  width: 1em;
-  height: 4em;
+    background: #0f9fff;
+    -webkit-animation: load1 1s infinite ease-in-out;
+    animation: load1 1s infinite ease-in-out;
+    width: 1em;
+    height: 4em;
 }
 
 .loader {
-  color: #0f9fff;
-  text-indent: -9999em;
-  margin: 88px auto;
-  position: relative;
-  font-size: 11px;
-  -webkit-transform: translateZ(0);
-  -ms-transform: translateZ(0);
-  transform: translateZ(0);
-  -webkit-animation-delay: -0.16s;
-  animation-delay: -0.16s;
+    color: #0f9fff;
+    text-indent: -9999em;
+    margin: 88px auto;
+    position: relative;
+    font-size: 11px;
+    -webkit-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-animation-delay: -0.16s;
+    animation-delay: -0.16s;
 }
 
 .loader:before,
 .loader:after {
-  position: absolute;
-  top: 0;
-  content: '';
+    position: absolute;
+    top: 0;
+    content: '';
 }
 
 .loader:before {
-  left: -1.5em;
-  -webkit-animation-delay: -0.32s;
-  animation-delay: -0.32s;
+    left: -1.5em;
+    -webkit-animation-delay: -0.32s;
+    animation-delay: -0.32s;
 }
 
 .loader:after {
-  left: 1.5em;
+    left: 1.5em;
 }
 
 @-webkit-keyframes load1 {
-  0%,
-  80%,
-  100% {
-    box-shadow: 0 0;
-    height: 4em;
-  }
-  40% {
-    box-shadow: 0 -2em;
-    height: 5em;
-  }
+    0%,
+    80%,
+    100% {
+        box-shadow: 0 0;
+        height: 4em;
+    }
+    40% {
+        box-shadow: 0 -2em;
+        height: 5em;
+    }
 }
 
 @keyframes load1 {
-  0%,
-  80%,
-  100% {
-    box-shadow: 0 0;
-    height: 4em;
-  }
-  40% {
-    box-shadow: 0 -2em;
-    height: 5em;
-  }
+    0%,
+    80%,
+    100% {
+        box-shadow: 0 0;
+        height: 4em;
+    }
+    40% {
+        box-shadow: 0 -2em;
+        height: 5em;
+    }
 }
 
 
 //// Vue transitions /////
 .video-block {
-  transition: all 1s;
+    transition: all 1s;
 }
 
 .videos-enter {
-  opacity: 0;
-  transform: translateY(30px);
+    opacity: 0;
+    transform: translateY(30px);
 }
 
 .videos-enter-active,
 .videos-leave-active {
-  transition: 1s cubic-bezier(0.59, 0.12, 0.34, 0.95);
-  transition-property: opacity, transform;
+    transition: 1s cubic-bezier(0.59, 0.12, 0.34, 0.95);
+    transition-property: opacity, transform;
 }
 
 .videos-enter-to {
-  opacity: 1;
-  transform: translateX(0);
+    opacity: 1;
+    transform: translateX(0);
 }
 
 //.videos-move {
@@ -280,15 +302,15 @@ nav {
 //}
 
 .videos-leave-active {
-  position: absolute;
-  margin: 0 auto;
+    position: absolute;
+    margin: 0 auto;
 }
 
 .videos-leave-to {
-  opacity: 0;
-  transform: translateX(100px);
-  //transform: scaleY(0);
-  //transform-origin: center top;
+    opacity: 0;
+    transform: translateX(100px);
+    //transform: scaleY(0);
+    //transform-origin: center top;
 }
 
 

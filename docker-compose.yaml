@@ -5,12 +5,16 @@ services:
     build: .
     env_file:
       - docker.env
+    entrypoint: ["./boot.sh"]
+    expose:
+      - 5000
     ports:
       - 5000:5000
     volumes:
       - .:/home/objdetect/objectdetect
     depends_on:
       - cloud-sql-proxy
+      - redis
 
   cloud-sql-proxy:
     image: gcr.io/cloudsql-docker/gce-proxy:1.11
@@ -21,4 +25,11 @@ services:
       - ./credentials.json:/secrets/cloudsql/credentials.json
     ports:
       - 5432
-#TODO how to map volume without replacing venv? Maybe add code to a subfolder instead of home path like /app/objdetect
+
+  rq_worker:
+    build: worker/.
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:alpine

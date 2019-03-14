@@ -9,10 +9,11 @@ Flask-Bootstrap==3.3.7.1
 Flask-Migrate==2.3.0
 Flask-SQLAlchemy==2.3.2
 Flask-WTF==0.14.2
-google-api-core==1.5.1
+google-api-core==1.8.0
 google-auth==1.5.1
-google-cloud-core==0.28.1
-google-cloud-datastore==1.7.1
+google-cloud-core==0.29.1
+google-cloud-storage==1.14.0
+google-resumable-media==0.3.2
 googleapis-common-protos==1.5.5
 grpcio==1.16.0
 hurry.filesize==0.9
@@ -33,6 +34,7 @@ python-dateutil==2.7.3
 python-dotenv==0.9.1
 python-editor==1.0.3
 pytz==2018.7
+redis==3.2.0
 requests==2.20.0
 rsa==4.0
 six==1.11.0
