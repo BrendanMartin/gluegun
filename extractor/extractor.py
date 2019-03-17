@@ -1,4 +1,6 @@
 import os
+from time import sleep
+
 import cv2
 import config
 if os.getenv('USE_CLOUD_STORAGE') == '1':
@@ -19,8 +21,6 @@ def zero_pad_frame(frame, total_frames):
 
 
 def extract_frames(submission_id, video_url):
-    logger.info('Extracting frames')
-
     video = cv2.VideoCapture(video_url)
 
     fps = video.get(cv2.CAP_PROP_FPS)
@@ -36,14 +36,16 @@ def extract_frames(submission_id, video_url):
         if count % fps == 0:    # capture one frame per second
             frame_num = zero_pad_frame(second, duration)
             filename = f'{frame_num}.jpg'
-            stored_image_paths.append(store_frame(image, submission_id, filename))
+            stored_path = store_frame(image, submission_id, filename)
+            yield dict(path=stored_path, progress=second / duration)
+            # stored_image_paths.append(store_frame(image, submission_id, filename))
             second += 1
 
         count += 1
 
     video.release()
     cv2.destroyAllWindows()
-    return stored_image_paths
+    # return stored_image_paths
 
 def main():
     print(zero_pad_frame(1, 3546))

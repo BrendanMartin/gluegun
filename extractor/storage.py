@@ -24,7 +24,7 @@ def get_video_path(submission_id):
 
 def get_paths_of_frames(submission_id):
     path = os.path.join(submission_download_dir, submission_id, 'frames')
-    return {x: y.path for x, y in zip(itertools.count(), os.scandir(path))}
+    return [y.path for y in os.scandir(path)]
 
 
 def get_submission_path(submission_id):

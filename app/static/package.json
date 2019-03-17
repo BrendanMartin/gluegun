@@ -19,6 +19,8 @@
   "devDependencies": {
     "bootstrap": "^4.3.1",
     "css-loader": "^2.1.1",
+    "loading-bar": "0.0.2",
+    "progressbar.js": "^1.0.1",
     "vue": "^2.6.8",
     "vue-loader": "^15.7.0",
     "vue-template-compiler": "^2.6.8",

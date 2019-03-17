@@ -3,6 +3,8 @@ version: "3"
 services:
   website:
     build: .
+    image: website
+    container_name: website
     env_file:
       - docker.env
     entrypoint: ["./boot.sh"]
@@ -27,8 +29,12 @@ services:
       - 5432
 
   rq_worker:
-    build: worker/.
+    image: website
+    env_file:
+      - docker.env
+    entrypoint: ../venv/bin/rq worker -u redis://redis:6379/0
     depends_on:
+      - website
       - redis
 
   redis:

@@ -3,34 +3,8 @@
     <div id="app">
         <Hello></Hello>
         <Localizer></Localizer>
-        <template v-if="showSubmit">
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Reddit submission URL"
-                               v-model="redditSubmURL">
-                        <span class="input-group-btn">
-                        <button class="btn btn-default" type="button" id="redditURLSubmit" @click="getRedditVideo"
-                                v-bind:class="{ 'disabled loading': disableURLSubmitBtn }">
-                            Go!
-                        </button>
-                    </span>
-                    </div>
-                </div>
-            </div>
-        </template>
-        <div class="row">
-            <div id="result"></div>
-            <template v-if="redditVideoURL">
-                <video width="300px" controls="" autoplay="" :src="redditVideoURL"></video>
-                <button class="btn btn-primary" @click="extractFrames"
-                        v-bind:class="{ 'disabled loading': disableExtractFramesBnt }">Extract frames
-                </button>
-            </template>
-        </div>
 
         <div class="video-list">
-
             <template v-if="videoData.length > 0">
                 <transition-group name="videos">
                     <div v-for="(video, idx) in videoData" class="row video-block" :key="video.reddit_id">
@@ -90,14 +64,14 @@
                                         <div class="btn-group mr-2" role="group">
                                             <button type="button" class="btn btn-primary" data-toggle="modal"
                                                     data-target="#videoFramesModal"
-                                                    @click="activeFramesRedditID=video.reddit_id; extractFrames(video.reddit_id, video.reddit_video_url)">
+{#                                                    @click="extractFrames(video.reddit_id, video.reddit_video_url)"#}
+                                            @click="$refs.framesModal.extractFrames(video.reddit_id, video.reddit_video_url)">
                                                 Label video frames
                                             </button>
                                         </div>
                                         <div class="btn-group mr-2" role="group">
                                             <transition name="fade" mode="out-in">
                                                 <button type="button" class="btn btn-light"
-                                                        {#                                        @click="noObject(video.reddit_id)"#}
                                                         @click="confirmNoObject=video.reddit_id"
                                                         v-if="confirmNoObject != video.reddit_id">
                                                     Object not present
@@ -132,44 +106,7 @@
         </div>
 
 
-        {#        Video frames modal  #}
-        <div class="modal" id="videoFramesModal" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Select Frames</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"
-                                @click="clearFrameSelections()">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div v-if="framesLoading">
-                            <div class="loader">Loading...</div>
-                        </div>
-                        <template v-if="Object.keys(videoFrames).length > 0">
-                            <div class="frames-container" v-show="!framesLoading">
-                                <div v-for="(url, key, index) in videoFrames" :key="key"
-                                     :class="['frame-outer', {selected:framesSelected.includes(key)}]">
-                                    <img :class="['frame', {selected:framesSelected.includes(key)}]"
-                                         @click="selectFrame(key)" :src="url" @load="frameLoaded"/>
-                                    <i v-if="framesSelected.includes(key)" class="fas fa-check-circle"></i>
+        <video-frames-modal ref="framesModal"></video-frames-modal>
 
-                                </div>
-                            </div>
-                        </template>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" @click="saveSelections()" data-dismiss="modal" class="btn btn-primary">
-                            Save selections <span
-                                v-if="framesSelected.length > 0"
-                                class="badge badge-light">${ framesSelected.length }</span></button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal"
-                                @click="clearFrameSelections()">Close
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 {% endblock %}

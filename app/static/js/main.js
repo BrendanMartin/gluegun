@@ -1,5 +1,6 @@
 import Hello from './Hello.vue'
 import Localizer from './Localizer.vue'
+import VideoFramesModal from './VideoFramesModal.vue'
 
 Vue.config.delimiters = ['${', '}'];
 
@@ -11,15 +12,9 @@ var app = new Vue({
         redditSubmURL: '',
         redditSubmID: '',
         redditVideoURL: '',
-        disableURLSubmitBtn: false,
-        disableExtractFramesBnt: false,
         videoData: [],
-        videoFrames: {},
         showVideoFramesModal: false,
-        framesLoading: false,
-        totalFramesLoaded: 0,
         activeFramesRedditID: '',
-        framesSelected: [],
         fetchVideosLoading: false,
         playbackRate: 1.0,
         playbackRates: [1.0, 1.5, 2.0, 2.5, 3.0].reverse(),
@@ -28,14 +23,15 @@ var app = new Vue({
             url: '/submissions/agg8n5/frames/01.jpg',
             width: 608,
             height: 1080
-        }
+        },
     },
     created: function () {
-        this.fetchVideos()
+        this.fetchVideos();
     },
     components: {
         Hello,
-        Localizer
+        Localizer,
+        VideoFramesModal
     },
     computed: {},
     methods: {
@@ -70,53 +66,7 @@ var app = new Vue({
             });
         },
         extractFrames(submissionID, videoURL) {
-            if (Object.keys(this.videoFrames).length > 0) {
-                return true;
-            }
-            this.disableExtractFramesBnt = true;
-            this.framesLoading = true;
-
-            $.post('/_extract_frames', {
-                submissionID: submissionID,
-                videoURL: videoURL
-            }).done(resp => {
-                this.disableExtractFramesBnt = false;
-                this.videoFrames = resp;
-            }).fail(() => {
-                return false
-            });
-        },
-        frameLoaded() {
-            this.totalFramesLoaded += 1;
-            if (this.totalFramesLoaded >= Object.keys(this.videoFrames).length) {
-                this.framesLoading = false;
-            }
-        },
-        selectFrame(key) {
-            if (this.framesSelected.includes(key)) {
-                this.framesSelected.splice(this.framesSelected.indexOf(key, 1))
-            } else {
-                this.framesSelected.push(key)
-            }
-        },
-        clearFrameSelections() {
-            this.framesSelected = [];
-        },
-        saveSelections() {
-            $.post('/_save_frame_selections', {
-                reddit_id: this.activeFramesRedditID,
-                framesSelected: JSON.stringify(this.framesSelected)
-            }).done(resp => {
-                this.framesSelected = [];
-                this.videoData = this.videoData.filter(el => {
-                    return el.reddit_id != this.activeFramesRedditID
-                });
-                this.videoFrames = {};
-                return true;
-            }).fail(() => {
-                return false;
-            });
-
+            this.$emit('extract-frames', submissionID, videoURL)
         },
         noObject(reddit_video_id) {
             $.post('_no_object', {

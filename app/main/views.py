@@ -3,7 +3,8 @@ from time import sleep
 
 import os
 import json
-from flask import render_template, request, jsonify, send_from_directory, session, current_app
+from flask import render_template, request, jsonify, send_from_directory, session, current_app, Response, abort, \
+    stream_with_context
 
 from app.main import main
 from app.main.forms import FindRedditVideoForm
@@ -82,25 +83,50 @@ def _get_reddit_video():
     return jsonify(data)
 
 
+
+@main.route('/_extract_frames_v2')
+def _extract_frames_v2():
+    submission_id = request.args.get('submissionID')
+    video_url = request.args.get('videoURL')
+
+    def generate():
+        try:
+            if not frames_exist(submission_id):
+                paths = []
+                for data in extract_frames(submission_id, video_url):
+                    paths.append(data['path'])
+                    yield 'event: progress\ndata: ' + json.dumps(dict(progress=data['progress'])) + '\n\n'
+            else:
+                paths = get_paths_of_frames(submission_id)  #TODO implement for gstorage
+
+            if os.getenv('USE_CLOUD_STORAGE') == '0':
+                print('in env')
+                # We're dealing with local files. Edit paths to use with send_from_directory
+                for i, path in enumerate(paths.copy()):
+                    new_path = path.split('extractor')[-1]
+                    new_path = new_path.replace('\\', '/')
+                    paths[i] = new_path
+
+            yield 'event: paths\ndata: ' + json.dumps(dict(paths=paths)) + '\n\n'
+
+        except Exception as e:
+            print("Exception during extract_frames generate: " + e)
+
+        yield 'event: done\n\n'
+
+    return Response(generate(), mimetype='text/event-stream')
+
+
+
 @main.route('/_extract_frames', methods=['POST'])
 def _extract_frames():
     submission_id = request.form.get('submissionID')
     video_url = request.form.get('videoURL')
 
-    # Changed to stream to CV2 right from video URL
-    # if not video_is_downloaded(submission_id):
-    #     download_video(submission_id, video_url)
-
-    # Check if frames already extracted
-
-    paths = []
-
     if not frames_exist(submission_id):
         paths = extract_frames(submission_id, video_url)
     else:
         paths = get_paths_of_frames(submission_id)
-
-    print(os.getenv('USE_CLOUD_STORAGE'), type(os.getenv('USE_CLOUD_STORAGE')))
 
     if os.getenv('USE_CLOUD_STORAGE') == '0':
         # We're dealing with local files. Edit paths to use with send_from_directory
