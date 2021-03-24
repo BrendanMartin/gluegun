@@ -37,7 +37,7 @@ pytz==2018.7
 redis==3.2.0
 requests==2.20.0
 rq==0.13.0
-rsa==4.0
+rsa==4.1
 six==1.11.0
 SQLAlchemy==1.2.12
 update-checker==0.16
