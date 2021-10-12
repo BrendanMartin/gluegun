@@ -23,7 +23,7 @@ Jinja2==2.10
 Mako==1.0.7
 MarkupSafe==1.0
 numpy==1.16.2
-opencv-python==4.0.0.21
+opencv-python==4.2.0.32
 praw==6.0.0
 prawcore==1.0.0
 protobuf==3.6.1
