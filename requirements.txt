@@ -22,7 +22,7 @@ itsdangerous==1.1.0
 Jinja2==2.10
 Mako==1.0.7
 MarkupSafe==1.0
-numpy==1.16.2
+numpy==1.22.0
 opencv-python==4.0.0.21
 praw==6.0.0
 prawcore==1.0.0
